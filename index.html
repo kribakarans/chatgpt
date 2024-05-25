@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML File Viewer</title>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #file-list {
+            width: 10%;
+            overflow-y: auto;
+            border-right: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        #viewport {
+            width: 90%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .file-item {
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="file-list">
+        <!-- List of HTML files will be dynamically inserted here -->
+    </div>
+    <div id="viewport">
+        <iframe id="content-frame"></iframe>
+    </div>
+
+    <script src="files.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileListContainer = document.getElementById('file-list');
+
+            files.forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.textContent = file;
+                fileItem.classList.add('file-item');
+                fileItem.addEventListener('click', () => loadFile(file));
+                fileListContainer.appendChild(fileItem);
+            });
+
+            function loadFile(file) {
+                const contentFrame = document.getElementById('content-frame');
+                contentFrame.src = `html/${file}`;
+            }
+        });
+    </script>
+</body>
+</html>
