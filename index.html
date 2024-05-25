@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML File Viewer</title>
+    <title>ChatGPT Threads</title>
     <style>
         body {
             display: flex;
@@ -11,17 +11,22 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
+            font-size: 12px;
         }
-        #file-list {
-            width: 10%;
+        #sidebar {
+            width: 15%;
+            max-width: 50%;
+            min-width: 10%;
             overflow-y: auto;
             border-right: 1px solid #ccc;
             padding: 10px;
             box-sizing: border-box;
             background-color: #ffffff;
+            resize: horizontal;
+            overflow: auto;
         }
         #viewport {
-            width: 90%;
+            flex-grow: 1;
             padding: 10px;
             box-sizing: border-box;
             background-color: #ffffff;
@@ -32,7 +37,7 @@
             border: none;
         }
         .file-item {
-            padding: 5px;
+            padding: 8px;
             margin-bottom: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
@@ -43,11 +48,20 @@
         .file-item.selected {
             background-color: #add8e6;
         }
+        #search-bar {
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
-    <div id="file-list">
-        <!-- List of HTML files will be dynamically inserted here -->
+    <div id="sidebar">
+        <input type="text" id="search-bar" placeholder="Search files...">
+        <div id="file-list">
+            <!-- List of HTML files will be dynamically inserted here -->
+        </div>
     </div>
     <div id="viewport">
         <iframe id="content-frame"></iframe>
@@ -57,6 +71,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const fileListContainer = document.getElementById('file-list');
+            const searchBar = document.getElementById('search-bar');
 
             files.forEach(file => {
                 const fileItem = document.createElement('div');
@@ -67,6 +82,18 @@
                     highlightSelected(fileItem);
                 });
                 fileListContainer.appendChild(fileItem);
+            });
+
+            searchBar.addEventListener('input', function() {
+                const searchText = searchBar.value.toLowerCase();
+                document.querySelectorAll('.file-item').forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    if (text.includes(searchText)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
             });
 
             function loadFile(file) {
